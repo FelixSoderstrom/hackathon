@@ -1,5 +1,5 @@
 from agents.StoryAgent import StoryAgent, generate_story
-from agents.RenderAgent import display_and_get_choice
+from agents.RenderAgent import display_and_get_input
 from agents.CombatAgent import CombatAgent
 
 
@@ -7,11 +7,11 @@ def run_game():
     print("\nVälkommen till AI Dungeon Master!")
     print("=" * 50)
 
-    # Initialize game context as a dictionary
+    # Initialize game context
     context = {
         "player_hp": 100,
         "location": "Dark Cave",
-        "previous_choice": None,
+        "user_input": None,
         "inventory": [],
     }
 
@@ -19,30 +19,26 @@ def run_game():
 
     while game_active:
         try:
-            # Generate story and choices
-            current_scene = generate_story(context)
+            # Generate story
+            story_response = generate_story(context)
 
-            # Get player's choice
-            player_choice = display_and_get_choice(
-                current_scene["text"], current_scene["choices"]
-            )
+            # Ensure story_response has text
+            if not isinstance(story_response, dict) or "text" not in story_response:
+                raise ValueError("Invalid story response format")
 
-            # Update context with player's choice and any relevant state changes
-            context.update(
-                {
-                    "previous_choice": player_choice,
-                    # Update location based on the choice if needed
-                    # "location": new_location_based_on_choice,
-                }
-            )
+            # Get player's input
+            user_input = display_and_get_input(story_response["text"])
+
+            # Update context with player's input
+            context["user_input"] = user_input
 
             # Check for game-ending conditions
-            if player_choice.lower() == "avsluta":
+            if user_input.lower() in ["avsluta", "quit", "exit"]:
                 game_active = False
-            elif "died" in current_scene.get("text", "").lower():
+            elif "died" in story_response["text"].lower():
                 print("\nGame Over!")
                 game_active = False
-            elif "won" in current_scene.get("text", "").lower():
+            elif "won" in story_response["text"].lower():
                 print("\nCongratulations! You've completed the adventure!")
                 game_active = False
 
