@@ -1,32 +1,20 @@
-import time
+from swarm import Agent
 
 
-def print_with_effect(text: str, delay: float = 0.01):
-    """
-    Print text with a typewriter effect
-
-    Args:
-        text: The text to print
-        delay: Delay between each character
-    """
-    for char in text:
-        print(char, end="", flush=True)
-        time.sleep(delay)
-    print()
+def render_scene(context=None):
+    # Din render logik här
+    pass
 
 
-def display_and_get_input(story: str) -> str:
-    """
-    Display the story and get free-form input from the user.
+def display_and_get_input(text):
+    """Display the story text and get user input"""
+    print("\n" + text + "\n")
+    return input("> ")
 
-    Args:
-        story: The story text to display
 
-    Returns:
-        The player's input
-    """
-    print("\n" + "=" * 50 + "\n")
-    print_with_effect(story)
-    print("\n" + "-" * 25 + "\n")
-
-    return input(">> ")
+# Skapa och exportera agenten
+render_agent = Agent(
+    name="Render Agent",
+    instructions="""You are a rendering agent...""",
+    functions=[render_scene],
+)

@@ -7,10 +7,10 @@ def run_game():
     print("\nVälkommen till AI Dungeon Master!")
     print("=" * 50)
 
-    # Initialize game context
+    # Initialize game context with minimal info
     context = {
         "player_hp": 100,
-        "location": "Dark Cave",
+        "location": None,  # Ta bort hårdkodningen av "Dark Cave"
         "user_input": None,
         "inventory": [],
     }
